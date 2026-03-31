@@ -20,5 +20,19 @@
   },
   "observability": {
     "enabled": true
+  },
+
+  // Production environment: deployed via ./deploy.sh prod
+  // Uses custom domain mcp.fairgo.app
+  "env": {
+    "production": {
+      "name": "fairgo-mcp-prod",
+      "routes": [
+        {
+          "pattern": "mcp.fairgo.app/*",
+          "zone_name": "fairgo.app"
+        }
+      ]
+    }
   }
 }

@@ -11,7 +11,7 @@ Connect this server to Claude, Cursor, VS Code, or any MCP-compatible AI assista
 Settings → Connectors → Add Custom Connector → paste:
 
 ```
-https://fairgo-mcp.nathaniel-ramm.workers.dev/mcp
+https://mcp.fairgo.app/mcp
 ```
 
 ### Claude Desktop
@@ -23,7 +23,7 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "fairgo": {
       "command": "npx",
-      "args": ["mcp-remote", "https://fairgo-mcp.nathaniel-ramm.workers.dev/mcp"]
+      "args": ["mcp-remote", "https://mcp.fairgo.app/mcp"]
     }
   }
 }
@@ -31,7 +31,7 @@ Add to `claude_desktop_config.json`:
 
 ### Cursor / VS Code / Other MCP Clients
 
-Add `https://fairgo-mcp.nathaniel-ramm.workers.dev/mcp` as an MCP server.
+Add `https://mcp.fairgo.app/mcp` as an MCP server.
 
 ## What It Does
 
@@ -86,7 +86,8 @@ npx vitest run test/integration/
 ### Deploy
 
 ```bash
-npm run deploy       # Deploy to Cloudflare Workers
+./deploy.sh dev      # Deploy to dev (fairgo-mcp.nathaniel-ramm.workers.dev)
+./deploy.sh prod     # Deploy to production (mcp.fairgo.app)
 ```
 
 ## Architecture
