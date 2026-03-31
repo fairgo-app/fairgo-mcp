@@ -32,7 +32,21 @@
           "pattern": "mcp.fairgo.app/*",
           "zone_name": "fairgo.app"
         }
-      ]
+      ],
+      "migrations": [
+        {
+          "new_sqlite_classes": ["FairGoMCP"],
+          "tag": "v1"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "class_name": "FairGoMCP",
+            "name": "MCP_OBJECT"
+          }
+        ]
+      }
     }
   }
 }
