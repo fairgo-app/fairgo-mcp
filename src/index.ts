@@ -87,14 +87,17 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/mcp") {
-      // MCP Streamable HTTP requires POST with Accept: text/event-stream.
-      // If someone GETs this URL (e.g., pasted into an LLM chat or browser),
-      // return the landing page instead of a protocol error.
+      // MCP Streamable HTTP uses multiple methods:
+      //   POST  — JSON-RPC requests (Accept must include text/event-stream)
+      //   GET   — SSE session resumption
+      //   DELETE — session termination
+      //   OPTIONS — CORS preflight
+      // Only plain browser GETs (no SSE accept) get the landing page.
       const accept = request.headers.get("Accept") ?? "";
-      const isMcpRequest =
-        request.method === "POST" && accept.includes("text/event-stream");
+      const isBrowserGet =
+        request.method === "GET" && !accept.includes("text/event-stream");
 
-      if (!isMcpRequest) {
+      if (isBrowserGet) {
         return landingPage(url.origin);
       }
 
@@ -133,6 +136,14 @@ export default {
           },
         }
       );
+    }
+
+    // MCP OAuth discovery — return 404 so clients know this server has no auth.
+    // Without this, the catch-all landing page returns 200 markdown, which
+    // Claude Code and other MCP clients misinterpret as OAuth metadata.
+    if (url.pathname === "/.well-known/oauth-authorization-server" ||
+        url.pathname === "/.well-known/oauth-protected-resource") {
+      return new Response("Not found", { status: 404 });
     }
 
     if (url.pathname === "/health" || url.pathname === "/healthz") {
